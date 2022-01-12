@@ -54,8 +54,10 @@ function makeHtmlBoard() {
 
     for (let x = 0; x < WIDTH; x++) {
       let cell = document.createElement("td");
+      //suspect string template literal causing issues
+        
       cell.setAttribute("id", `${y}-${x}`);
-
+      //  cell.setAttribute("id", y + "-" + x);
       tableRow.append(cell);
     }
     htmlBoard.append(tableRow);
@@ -74,18 +76,22 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
-  let cell = document.querySelector("id", `${y}-${x}`);
-
+  let tableName = `${y}-${x}`;
+  let cell = document.getElementById(tableName);
   let piece = document.createElement("div");
-  piece.setAttribute("class", "piece");
+  
+  piece.setAttribute("class", `p${currPlayer} piece`);
+
+  /* Unnecessary, above line does the same thing with less logic
   if (currPlayer === 1) {
-    piece.setAttribute("class","p1");
+    piece.setAttribute("class","p1 piece");
     currPlayer = 2;
   }
   else if (currPlayer === 2) {
-    piece.setAttribute("class","p2");
+    piece.setAttribute("class","p2 piece");
     currPlayer = 1;
   }
+  */
 
   cell.append(piece);
 }
@@ -110,7 +116,9 @@ function handleClick(evt) {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
-  placeInTable(y, x);
+    board[y][x] = currPlayer;
+    placeInTable(y, x);
+    
 
   // check for win
   if (checkForWin()) {
@@ -122,6 +130,7 @@ function handleClick(evt) {
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  currPlayer = 1 ? currPlayer = 2 : currPlayer = 1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
