@@ -18,10 +18,10 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  for(let i = 0; i < WIDTH; i++){
+  for(let i = 0; i < HEIGHT; i++){
     board[i] = [];
 
-    for(let j = 0; j < HEIGHT; j++){
+    for(let j = 0; j < WIDTH; j++){
       board[i][j] = null;
     }
   }
@@ -30,15 +30,14 @@ function makeBoard() {
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
   const htmlBoard = document.querySelector("#board");
 
-  // TODO: add comment for this code
+  // Creating top row and adding Click event listener
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
 
-  // TODO: add comment for this code
+  // Appending cells to top row
   for (let x = 0; x < WIDTH; x++) {
     let headCell = document.createElement("td");
     headCell.setAttribute("id", x);
@@ -50,20 +49,15 @@ function makeHtmlBoard() {
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
   for (let y = 0; y < HEIGHT; y++) {
-    // TODO: Create a table row element and assign to a "row" variable
+    // Create a table row element and assign to a "row" variable
     let tableRow = document.createElement("tr");
 
     for (let x = 0; x < WIDTH; x++) {
-      // TODO: Create a table cell element and assign to a "cell" letiable
       let cell = document.createElement("td");
-      // TODO: add an id, y-x, to the above table cell element
-      // you'll use this later, so make sure you use y-x
       cell.setAttribute("id", `${y}-${x}`);
 
-      // TODO: append the table cell to the table row
       tableRow.append(cell);
     }
-    // TODO: append the row to the html board
     htmlBoard.append(tableRow);
   }
 }
@@ -72,6 +66,7 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 5
+
   return 5;
 }
 
@@ -79,6 +74,20 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let cell = document.querySelector("id", `${y}-${x}`);
+
+  let piece = document.createElement("div");
+  piece.setAttribute("class", "piece");
+  if (currPlayer === 1) {
+    piece.setAttribute("class","p1");
+    currPlayer = 2;
+  }
+  else if (currPlayer === 2) {
+    piece.setAttribute("class","p2");
+    currPlayer = 1;
+  }
+
+  cell.append(piece);
 }
 
 /** endGame: announce game end */
