@@ -18,10 +18,10 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  for(let i = 0; i < HEIGHT; i++){
+  for (let i = 0; i < HEIGHT; i++) {
     board[i] = [];
 
-    for(let j = 0; j < WIDTH; j++){
+    for (let j = 0; j < WIDTH; j++) {
       board[i][j] = null;
     }
   }
@@ -55,7 +55,7 @@ function makeHtmlBoard() {
     for (let x = 0; x < WIDTH; x++) {
       let cell = document.createElement("td");
       //suspect string template literal causing issues
-        
+
       cell.setAttribute("id", `${y}-${x}`);
       //  cell.setAttribute("id", y + "-" + x);
       tableRow.append(cell);
@@ -67,7 +67,7 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return bottom empty y (null if filled) */
 
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 5
+
   for (let y = WIDTH - 2; y >= 0; y--) {
     if (board[y][x] === null) {
       return y;
@@ -79,31 +79,19 @@ function findSpotForCol(x) {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
+
   let tableName = `${y}-${x}`;
   let cell = document.getElementById(tableName);
   let piece = document.createElement("div");
-  
+
   piece.setAttribute("class", `p${currPlayer} piece`);
-
-  /* Unnecessary, above line does the same thing with less logic
-  if (currPlayer === 1) {
-    piece.setAttribute("class","p1 piece");
-    currPlayer = 2;
-  }
-  else if (currPlayer === 2) {
-    piece.setAttribute("class","p2 piece");
-    currPlayer = 1;
-  }
-  */
-
   cell.append(piece);
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
-  console.alert(msg);
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -119,24 +107,21 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
-    board[y][x] = currPlayer;
-    placeInTable(y, x);
-    
-  
+  board[y][x] = currPlayer;
+  placeInTable(y, x);
+
+
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
   if (board.every(cell => cell === null)) {
     endGame();
   }
 
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
   currPlayer === 1 ? currPlayer = 2 : currPlayer = 1;
 }
 
@@ -151,18 +136,22 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal & all color of current
-    // player
-    cells.every(cell => function(){
-      let y = cell[0];
-      let x = cell[1];
-
-      if(board[y][x] === currPlayer){
-        return true;
+    /*  Buggy Code, could use fixing! Will look at later
+        cells.every(cell => {
+          let y = cell[0];
+          let x = cell[1];
+    
+          if (getPieceInBoard(y, x) === currPlayer) {
+            return true;
+          }
+          return false;
+        }); */
+    for (let cell of cells) {
+      if (getPieceInBoard(cell[0], cell[1]) !== currPlayer) {
+        return false;
       }
-      return false;
-    });
-
+    }
+    return true;
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
@@ -170,10 +159,6 @@ function checkForWin() {
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      // TODO: assign values to the below variables for each of the ways to win
-      // horizontal has been assigned for you
-      // each should be an array of 4 cell coordinates:
-      // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
       let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
@@ -187,6 +172,15 @@ function checkForWin() {
     }
   }
 }
+
+/** Given coordinates, makes sure piece is in bounds and returns piece if so */
+function getPieceInBoard(y, x) {
+  if (y < HEIGHT && y >= 0) {
+    if (x < WIDTH && x >= 0) {
+      return board[y][x];
+    }
+  }
+};
 
 makeBoard();
 makeHtmlBoard();
